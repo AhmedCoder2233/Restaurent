@@ -2,10 +2,31 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation"; // <-- added
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname(); // <-- added
+
+  // Voice Navigation
+  useEffect(() => {
+    const speak = (text: string) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 1;
+      utterance.pitch = 1.2;
+      speechSynthesis.cancel(); // stop previous speech
+      speechSynthesis.speak(utterance);
+    };
+
+    if (pathname === "/") speak("Welcome to Home Page");
+    else if (pathname === "/menu") speak("Welcome to Menu Page");
+    else if (pathname === "/cart") speak("Welcome to Cart Page");
+    else if (pathname === "/chat") speak("Welcome to Chat with AI Page");
+    else if (pathname === "/login") speak("Welcome to Sign In Page");
+    else if (pathname === "/signup") speak("Welcome to Sign Up Page");
+  }, [pathname]);
 
   useEffect(() => {
     if (darkMode) document.documentElement.classList.add("dark");
@@ -75,9 +96,26 @@ export default function Header() {
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           >
-            <span className="block w-6 h-0.5 bg-gray-700 dark:bg-orange-300 mb-1 transition-transform duration-300" style={{ transform: menuOpen ? "rotate(45deg) translate(5px,5px)" : "rotate(0)" }}></span>
-            <span className="block w-6 h-0.5 bg-gray-700 dark:bg-orange-300 mb-1 transition-opacity duration-300" style={{ opacity: menuOpen ? 0 : 1 }}></span>
-            <span className="block w-6 h-0.5 bg-gray-700 dark:bg-orange-300 transition-transform duration-300" style={{ transform: menuOpen ? "rotate(-45deg) translate(5px,-5px)" : "rotate(0)" }}></span>
+            <span
+              className="block w-6 h-0.5 bg-gray-700 dark:bg-orange-300 mb-1 transition-transform duration-300"
+              style={{
+                transform: menuOpen
+                  ? "rotate(45deg) translate(5px,5px)"
+                  : "rotate(0)",
+              }}
+            ></span>
+            <span
+              className="block w-6 h-0.5 bg-gray-700 dark:bg-orange-300 mb-1 transition-opacity duration-300"
+              style={{ opacity: menuOpen ? 0 : 1 }}
+            ></span>
+            <span
+              className="block w-6 h-0.5 bg-gray-700 dark:bg-orange-300 transition-transform duration-300"
+              style={{
+                transform: menuOpen
+                  ? "rotate(-45deg) translate(5px,-5px)"
+                  : "rotate(0)",
+              }}
+            ></span>
           </button>
         </div>
       </div>
