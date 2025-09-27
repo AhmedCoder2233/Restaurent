@@ -54,7 +54,7 @@ export default function MenuPage() {
 
     const fetchMenu = async () => {
       try {
-        const res = await fetch("https://myapiname.loca.lt/users/getmenu", {
+        const res = await fetch("https://8wrj1wl6-8000.inc1.devtunnels.ms/users/getmenu", {
           headers: { Authorization: `Bearer ${tokenData.token}` },
         });
         if (res.status === 403) {
@@ -341,6 +341,7 @@ export default function MenuPage() {
     </div>
   );
 }
+
 
 
 
