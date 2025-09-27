@@ -54,7 +54,7 @@ export default function MenuPage() {
 
     const fetchMenu = async () => {
       try {
-        const res = await fetch("https://8wrj1wl6-8000.inc1.devtunnels.ms/users/getmenu", {
+        const res = await fetch("http://192.168.0.108:8000/users/getmenu", {
           headers: { Authorization: `Bearer ${tokenData.token}` },
         });
         if (res.status === 403) {
@@ -341,6 +341,7 @@ export default function MenuPage() {
     </div>
   );
 }
+
 
 
 
