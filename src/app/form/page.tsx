@@ -46,7 +46,7 @@ export default function CheckoutPage() {
     if (!tokenData?.token) return;
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:8000/users/getorders", {
+        const res = await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/getorders", {
           headers: { Authorization: `Bearer ${tokenData.token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch orders");
@@ -113,7 +113,7 @@ useEffect(() => {
 
     try {
       for (let order of orders) {
-        await fetch("http://localhost:8000/users/submit", {
+        await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -134,7 +134,7 @@ useEffect(() => {
           }),
         });
 
-        await fetch("http://localhost:8000/users/submit2", {
+        await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/submit2", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -156,7 +156,7 @@ useEffect(() => {
         });
       }
 
-      await fetch(`http://localhost:8000/users/deleteallorders/${tokenData.useremail}`, {
+      await fetch(`https://jessika-patrological-crankly.ngrok-free.dev/users/deleteallorders/${tokenData.useremail}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${tokenData.token}` },
       });
@@ -301,4 +301,5 @@ if (!tokenData || fetchError) {
     </div>
   );
 }
+
 
