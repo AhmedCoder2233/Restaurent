@@ -60,28 +60,31 @@ export default function CheckoutPage() {
     fetchOrders();
   }, [tokenData]);
 
-  // Location fetch
-  useEffect(() => {
-    if (!navigator.geolocation) return setLocationName("Location not available");
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude } = pos.coords;
-        try {
-          const res = await fetch(
-            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-          );
-          const data = await res.json();
-          const location =
-            data.city || data.locality || data.principalSubdivision || `${latitude}, ${longitude}`;
-          setLocationName(location);
-        } catch {
-          setLocationName(`${latitude}, ${longitude}`);
-        }
-      },
-      () => setLocationName("Permission denied"),
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  }, []);
+//location fetch
+useEffect(() => {
+  if (!navigator.geolocation) return setLocationName("Location not available");
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+        );
+        const data = await res.json();
+
+        const location =
+          `${data.address.road || ""}, ${data.address.neighbourhood || ""}, ${data.address.suburb || ""}, ${data.address.city || data.address.town || data.address.village || ""}, ${data.address.state || ""}, ${data.address.country || ""}`.replace(/,\s*,/g, ",");
+
+        setLocationName(location.trim().replace(/^,|,$/g, ""));
+      } catch {
+        setLocationName(`${latitude}, ${longitude}`);
+      }
+    },
+    () => setLocationName("Permission denied"),
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}, []);
 
   // Total price
   const totalPrice = orders.reduce(
@@ -298,3 +301,4 @@ if (!tokenData || fetchError) {
     </div>
   );
 }
+
