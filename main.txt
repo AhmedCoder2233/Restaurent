@@ -1,0 +1,138 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+
+type Order = {
+  orderid: string;
+  name: string;
+  table_no: string;
+  useremail: string;
+  item_name: string;
+  item_description: string;
+  price: string;
+  quantity: number;
+  total: number;
+  location_name: string;
+  status: string;
+};
+
+export default function OrderStatus() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  const router = useRouter();
+
+  const fetchOrders = async () => {
+    const tokenRaw = localStorage.getItem("token");
+    if (!tokenRaw) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    const tokenData = JSON.parse(tokenRaw);
+    setIsAuthenticated(true);
+
+    try {
+      const res = await fetch("http://localhost:8000/users/getstatus", {
+        headers: { Authorization: `Bearer ${tokenData.token}` },
+      });
+
+      if (!res.ok) {
+        if (res.status === 404) {
+          setOrders([]);
+          return;
+        }
+        throw new Error("Failed to fetch orders");
+      }
+
+      const data = await res.json();
+      setOrders(data);
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // 🔑 Agar token missing hai to login button dikhao
+  if (isAuthenticated === false) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
+        <button
+          onClick={() => router.push("/login")}
+          className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition"
+        >
+          Login to view orders
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900 px-6 py-10">
+      <h1 className="text-3xl font-bold text-orange-500 mb-6 text-center dark:text-orange-400">
+        Order Status
+      </h1>
+      {errorMsg && (
+        <p className="text-red-500 text-center dark:text-red-400">{errorMsg}</p>
+      )}
+      {orders.length === 0 ? (
+        <p className="text-gray-600 text-center dark:text-gray-400">
+          No active orders.
+        </p>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg space-y-4"
+        >
+          {orders.map((order) => (
+            <motion.div
+              key={order.orderid}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm hover:shadow-md transition bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+            >
+              <div className="flex-1">
+                <p className="font-bold text-lg text-gray-800 dark:text-gray-100">
+                  {order.item_name}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  {order.item_description}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  Rs {order.price} × {order.quantity} ={" "}
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    Rs {order.total}
+                  </span>
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Table No: {order.table_no} • Location: {order.location_name}
+                </p>
+              </div>
+
+              <span
+                className={`mt-3 sm:mt-0 px-3 py-1 rounded-lg text-sm font-semibold text-center min-w-[90px] ${
+                  order.status === "Approved"
+                    ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300"
+                    : order.status === "Rejected"
+                    ? "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-300"
+                    : "bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-300"
+                }`}
+              >
+                {order.status || "Pending"}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
+    </div>
+  );
+}
