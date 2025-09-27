@@ -21,7 +21,7 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await fetch("https://myapiname.loca.lt/users/signin", {
+      const res = await fetch("https://8wrj1wl6-8000.inc1.devtunnels.ms/users/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -110,5 +110,6 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
