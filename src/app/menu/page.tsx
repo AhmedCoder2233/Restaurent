@@ -54,7 +54,7 @@ export default function MenuPage() {
 
     const fetchMenu = async () => {
       try {
-        const res = await fetch("http://localhost:8000/users/getmenu", {
+        const res = await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/getmenu", {
           headers: { Authorization: `Bearer ${tokenData.token}` },
         });
         if (res.status === 403) {
@@ -341,5 +341,6 @@ export default function MenuPage() {
     </div>
   );
 }
+
 
 
