@@ -27,7 +27,7 @@ export default function SignupPage() {
     setMessage("");
 
     try {
-      const res = await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/signup", {
+      const res = await fetch("http://localhost:8000/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -35,7 +35,7 @@ export default function SignupPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Signup failed");
 
-      const loginRes = await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/signin", {
+      const loginRes = await fetch("http://localhost:8000/users/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ useremail: form.useremail, password: form.password }),
@@ -131,4 +131,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
 
