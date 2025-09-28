@@ -64,7 +64,7 @@ const [messages, setMessages] = useState<
 
     try {
       const res = await fetch(
-        `https://jessika-patrological-crankly.ngrok-free.dev/callAgent/${encodeURIComponent(
+        `http://localhost:8000/callAgent/${encodeURIComponent(
           userMessage
         )}/${encodeURIComponent(tokenData.token)}`,
         { method: "POST" }
@@ -193,4 +193,5 @@ const [messages, setMessages] = useState<
     </div>
   );
 }
+
 
