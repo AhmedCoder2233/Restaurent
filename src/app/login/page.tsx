@@ -21,7 +21,7 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await fetch("http://192.168.0.108:8000/users/signin", {
+      const res = await fetch("http://localhost:8000/users/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -110,6 +110,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
