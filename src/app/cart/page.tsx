@@ -49,7 +49,7 @@ export default function OrdersPage() {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/getorders", {
+        const res = await fetch("http://localhost:8000/users/getorders", {
           headers: {
             Authorization: `Bearer ${tokenData.token}`,
           },
@@ -272,4 +272,5 @@ export default function OrdersPage() {
     </div>
   );
 }
+
 
