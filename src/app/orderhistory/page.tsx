@@ -35,7 +35,7 @@ export default function OrderStatus() {
     setIsAuthenticated(true);
 
     try {
-      const res = await fetch("https://jessika-patrological-crankly.ngrok-free.dev/users/getstatus", {
+      const res = await fetch("http://localhost:8000/users/getstatus", {
         headers: { Authorization: `Bearer ${tokenData.token}` },
       });
 
@@ -183,4 +183,5 @@ export default function OrderStatus() {
     </div>
   );
 }
+
 
