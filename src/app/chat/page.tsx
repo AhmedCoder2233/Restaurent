@@ -64,7 +64,7 @@ const [messages, setMessages] = useState<
 
     try {
       const res = await fetch(
-        `http://localhost:8000/callAgent/${encodeURIComponent(
+        `http://localhost:8000/agent/callAgent/${encodeURIComponent(
           userMessage
         )}/${encodeURIComponent(tokenData.token)}`,
         { method: "POST" }
@@ -193,5 +193,6 @@ const [messages, setMessages] = useState<
     </div>
   );
 }
+
 
 
